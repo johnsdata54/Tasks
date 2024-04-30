@@ -35,19 +35,51 @@ cur.execute("""INSERT INTO person (id, name, age, gender) VALUES
             """)
 
 # Adding column to table
+cur.execute(""" ALTER TABLE person
+            ADD emp_id INT;
+
+""")
 
 # Insert values into new column
-
-# Query duplicates
+cur.execute(""" INSERT INTO person (emp_id)
+                VALUES (500,
+                        501, 
+                        502,
+                        503,
+                        504,
+                        505,
+                        506,
+                        507);
+""")
 
 # Create additional table
-
+cur.execute("""CREATE TABLE IF NOT EXISTS employee (
+            emp_id INT PRIMARY KEY,
+            job_title VARCHAR(255)
+            );
+            """)
 # Fill second table with data
+cur.execute("""INSERT INTO employee (emp_id, job_title) VALUES
 
+               (500, 'Accountant'),
+               (501, 'Financial Analyst'),
+               (502, 'Junior Software Engineer'),
+               (503, 'Technician'),
+               (504, 'Data Analyst'),
+               (505, 'Data Scientist'),
+               (506, 'Data Engineer'),
+               (507, 'Lead Data Analyst');
+            """)
 # Join tables
-
+cur.execute(""" SELECT *
+            FROM person
+            INNER JOIN employee
+            ON person.emp_id = employee.emp_id;
+""")
 # filter tables with query
+cur.execute("""
 
+""")
 
 
 conn.commit()
