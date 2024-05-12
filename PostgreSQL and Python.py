@@ -20,7 +20,7 @@ cur.execute("""CREATE TABLE IF NOT EXISTS person (
             """
             )
 
-# Inserting data into a table
+# Inserting person data into a table
 
 cur.execute("""INSERT INTO person (id, name, age, gender) VALUES
             
@@ -34,31 +34,35 @@ cur.execute("""INSERT INTO person (id, name, age, gender) VALUES
             (8, 'Timothy', 26, 'm');
             """)
 
-# Adding column to table
+# Adding column to table for employee id
 cur.execute(""" ALTER TABLE person
             ADD emp_id INT;
 
 """)
 
-# Insert values into new column
-cur.execute(""" INSERT INTO person (emp_id)
-                VALUES (500,
-                        501, 
-                        502,
-                        503,
-                        504,
-                        505,
-                        506,
-                        507);
+# Inserting employee id values into new column
+cur.execute(""" UPDATE person
+                SET emp_id = CASE 
+                                WHEN id = 1 THEN 500
+                                WHEN id = 2 THEN 501
+                                WHEN id = 3 THEN 502
+                                WHEN id = 4 THEN 503
+                                WHEN id = 5 THEN 504
+                                WHEN id = 6 THEN 505
+                                WHEN id = 7 THEN 506
+                                WHEN id = 8 THEN 507
+                                ELSE NULL
+                            END;
 """)
 
-# Create additional table
+# Creating additional table to contain employee data
 cur.execute("""CREATE TABLE IF NOT EXISTS employee (
             emp_id INT PRIMARY KEY,
             job_title VARCHAR(255)
             );
             """)
-# Fill second table with data
+
+# Updating second table with data
 cur.execute("""INSERT INTO employee (emp_id, job_title) VALUES
 
                (500, 'Accountant'),
@@ -70,17 +74,22 @@ cur.execute("""INSERT INTO employee (emp_id, job_title) VALUES
                (506, 'Data Engineer'),
                (507, 'Lead Data Analyst');
             """)
-# Join tables
+
+# Joining tables on employee id
 cur.execute(""" SELECT *
             FROM person
             INNER JOIN employee
             ON person.emp_id = employee.emp_id;
 """)
+
 # filter tables with query
-cur.execute("""
-
+# finding all employees that work in the data field
+query = cur.execute(""" SELECT person.name
+            FROM person
+            INNER JOIN employee
+            ON person.emp_id = employee.emp_id
+            WHERE employee.job_title IN ('Data Analyst', 'Data Scientist' ,'Data Engineer', 'Lead Data Analyst');
 """)
-
 
 conn.commit()
 
